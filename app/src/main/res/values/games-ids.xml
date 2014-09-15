@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Google Play game services IDs.
+Save this file as res/values/games-ids.xml in your project.
+-->
+<resources>
+    <string name="app_id">1057839477627</string>
+    <string name="leaderboard_fastest_time">CgkI--aV4eQeEAIQBg</string>
+
+    <!-- Achievements -->
+    <string name="achievement_snail">CgkI--aV4eQeEAIQAQ</string>
+    <string name="achievement_pig">CgkI--aV4eQeEAIQAg</string>
+    <string name="achievement_rabbit">CgkI--aV4eQeEAIQAw</string>
+    <string name="achievement_zebra">CgkI--aV4eQeEAIQBA</string>
+    <string name="achievement_cheetah">CgkI--aV4eQeEAIQBQ</string>
+
+</resources>

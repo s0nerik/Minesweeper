@@ -1,0 +1,116 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/tile_pattern">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/flag_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_flag_filled" />
+
+        <com.etiennelawlor.minesweeper.views.CustomFontTextView
+            android:id="@+id/flags_tv"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/flag_iv"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="10"
+            android:textColor="@color/red"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:textFont="DS_DIGIT" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/timer_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/timer_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_timer" />
+
+        <com.etiennelawlor.minesweeper.views.CustomFontTextView
+            android:id="@+id/timer_tv"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="00:00"
+            android:textColor="@color/red"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:textFont="DS_DIGIT" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/minesweeper_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timer_ll"
+        android:layout_marginTop="16dp"
+        android:background="@color/gray2"
+        android:paddingBottom="6dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingTop="6dp">
+
+        <GridView
+            android:id="@+id/minesweeper_gv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="0dp"
+            android:numColumns="8"
+            android:verticalSpacing="0dp">
+
+        </GridView>
+
+    </RelativeLayout>
+
+    <ToggleButton
+        android:id="@+id/flag_tb"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/minesweeper_rl"
+        android:drawableTop="@drawable/selector_bg_flag_toggle"
+        android:paddingTop="12dp"
+        android:textOn=""
+        android:textOff=""/>
+
+    <ImageButton
+        android:id="@+id/face_ib"
+        android:layout_width="wrap_content"
+        android:layout_height="51dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_happy"
+        android:layout_below="@id/minesweeper_rl"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

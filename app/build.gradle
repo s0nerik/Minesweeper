@@ -1,0 +1,48 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 20
+    buildToolsVersion "20.0.0"
+
+    defaultConfig {
+        applicationId "com.etiennelawlor.minesweeper"
+        minSdkVersion 14
+        targetSdkVersion 20
+        versionCode 3
+        versionName "0.0.3"
+    }
+    signingConfigs {
+        release {
+            storeFile file("interapptiv3.keystore")
+            storePassword "senditallofit"
+            keyAlias "quickreturn-release"
+            keyPassword "senditallofit"
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            runProguard false
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            runProguard false
+            debuggable true
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds true
+        abortOnError false
+        disable 'InvalidPackage'
+    }
+    android.aaptOptions.useAaptPngCruncher = true
+    productFlavors {
+    }
+}
+
+dependencies {
+    compile 'com.jakewharton:butterknife:5.1.1'
+    compile 'com.google.android.gms:play-services:5.0.+'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}

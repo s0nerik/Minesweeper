@@ -34,3 +34,7 @@ If you beat the game, your score will be submitted to Google Play Games, and you
 Future Todos
 ============
 In the future, I would like to come up with different difficulty levels, different board sizes, saving game progress, more achievements to unlock.
+
+Issues
+======
+Connecting to Google Play Services works sometimes but not all the time.  Given some more time I would be able to test on multiple devices to try to track down the issue.  For example, on my Nexus 5 it is working, but at the moment on my Mom's Samsung Galaxy S5, connecting to Google Play Services is not working.

@@ -16,5 +16,12 @@
         android:orderInCategory="200"
         android:showAsAction="never" />
 
+    <item android:id="@+id/action_rules"
+        android:title="@string/action_rules"
+        android:orderInCategory="200"
+        android:showAsAction="never" />
+
+
+
 
 </menu>

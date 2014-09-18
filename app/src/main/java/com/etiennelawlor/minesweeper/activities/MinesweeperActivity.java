@@ -1,5 +1,6 @@
 package com.etiennelawlor.minesweeper.activities;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -110,6 +111,30 @@ GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
                 } else {
                     Toast.makeText(this, "Please sign in to view achievements", Toast.LENGTH_SHORT).show();
                 }
+
+                return true;
+            case R.id.action_rules:
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        this);
+
+                // set title
+                alertDialogBuilder.setTitle("Minesweeper Rules");
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage(getString(R.string.rules))
+                        .setCancelable(true)
+                        .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                            }
+                        });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
 
                 return true;
             default:

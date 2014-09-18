@@ -7,12 +7,14 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +22,7 @@ import com.etiennelawlor.minesweeper.R;
 import com.etiennelawlor.minesweeper.activities.BaseGameActivity;
 import com.etiennelawlor.minesweeper.adapters.MinesweeperGridAdapter;
 import com.etiennelawlor.minesweeper.interfaces.MinesweeperInterface;
+import com.etiennelawlor.minesweeper.utils.MinesweeperUtils;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.leaderboard.LeaderboardVariant;
@@ -29,11 +32,15 @@ import com.google.android.gms.games.leaderboard.ScoreSubmissionData;
 import org.w3c.dom.Text;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import de.keyboardsurfer.android.widget.crouton.Configuration;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 /**
  * Created by etiennelawlor on 9/11/14.
@@ -65,9 +72,10 @@ public class MinesweeperFragment extends Fragment {
                 int secs = (int) (mUpdatedTime / 1000);
                 int mins = secs / 60;
                 secs = secs % 60;
-//                int milliseconds = (int) (mUpdatedTime % 1000);
+                int milliseconds = (int) (mUpdatedTime % 1000) / 10;
                 mTimerTextView.setText(String.format("%02d", mins) + ":"
-                        + String.format("%02d", secs));
+                        + String.format("%02d", secs) + ":"
+                        + String.format("%02d", milliseconds));
                 mCustomHandler.postDelayed(this, 0);
             }
 
@@ -131,7 +139,21 @@ public class MinesweeperFragment extends Fragment {
 
                                 uncoverAllMines();
 
-                                mCoordinator.displayAlert("Game Over", "Look out for the mines.");
+                                Style croutonStyle = new Style.Builder()
+                                        .setHeight(MinesweeperUtils.dp2px(getActivity(), 50))
+//                                .setTextColor(getResources().getColor(R.color.white))
+                                        .setGravity(Gravity.CENTER)
+                                        .setBackgroundColor(R.color.red)
+                                        .build();
+
+                                Crouton.makeText(getActivity(), "Game Over. Look out for the mines.", croutonStyle)
+                                        .setConfiguration(new Configuration.Builder()
+                                                .setDuration(1500)
+                                                .setInAnimation(R.anim.crouton_in)
+                                                .setOutAnimation(R.anim.crouton_out)
+                                                .build())
+                                        .show();
+
                             } else {
                                 int adjacentMineCount = getAdjacentMineCount(i, j);
 
@@ -240,12 +262,44 @@ public class MinesweeperFragment extends Fragment {
                 if(scoreSubmissionData!=null){
                     ScoreSubmissionData.Result result = scoreSubmissionData.getScoreResult(LeaderboardVariant.TIME_SPAN_ALL_TIME);
                     if(result!=null){
-//                        Log.d(getClass().getSimpleName(), "result.formattedScore - "+result.formattedScore);
-//                        Log.d(getClass().getSimpleName(), "result.newBest - "+result.newBest);
-                        if(result.newBest)
-                            mCoordinator.displayAlert("New High Score", String.format("%s is your new personal best!", result.formattedScore));
-                        else
-                            mCoordinator.displayAlert("Congratulations", String.format("You beat Minesweeper in %s.", result.formattedScore));
+                        if(result.newBest) {
+
+                            Style croutonStyle = new Style.Builder()
+                                    .setHeight(MinesweeperUtils.dp2px(getActivity(), 50))
+//                                .setTextColor(getResources().getColor(R.color.white))
+                                    .setGravity(Gravity.CENTER)
+                                    .setBackgroundColor(R.color.dark_green)
+                                    .build();
+
+                            Crouton.makeText(getActivity(), String.format("New High Score! %s is your new personal best!", result.formattedScore), croutonStyle)
+                                    .setConfiguration(new Configuration.Builder()
+                                            .setDuration(3000)
+                                            .setInAnimation(R.anim.crouton_in)
+                                            .setOutAnimation(R.anim.crouton_out)
+                                            .build())
+                                    .show();
+                        } else {
+
+                            String formattedScore = mTimerTextView.getText().toString();
+
+                            if(formattedScore.startsWith("00:"))
+                                formattedScore = formattedScore.substring(3);
+
+                            Style croutonStyle = new Style.Builder()
+                                    .setHeight(MinesweeperUtils.dp2px(getActivity(), 50))
+//                                .setTextColor(getResources().getColor(R.color.white))
+                                    .setGravity(Gravity.CENTER)
+                                    .setBackgroundColor(R.color.blue)
+                                    .build();
+
+                            Crouton.makeText(getActivity(), String.format("Congratulations! You beat Minesweeper in %s.", formattedScore), croutonStyle)
+                                    .setConfiguration(new Configuration.Builder()
+                                            .setDuration(3000)
+                                            .setInAnimation(R.anim.crouton_in)
+                                            .setOutAnimation(R.anim.crouton_out)
+                                            .build())
+                                    .show();
+                        }
 
                     }
                 }
@@ -317,7 +371,7 @@ public class MinesweeperFragment extends Fragment {
         mClickedTileCount = 0;
         mFlagsCount = 10;
         mFlagsTextView.setText(String.valueOf(mFlagsCount));
-        mTimerTextView.setText("00:00");
+        mTimerTextView.setText("00:00:00");
         mBoard = new boolean [8][8];
         mClickedTiles = new boolean [8][8];
 

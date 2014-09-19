@@ -53,6 +53,22 @@ public class CustomFontTextView extends TextView {
                 return "DS-DIGII.ttf";
             case 1 :
                 return "DS-DIGIT.ttf";
+            case 2 :
+                return "Digital_Dismay.otf";
+            case 3 :
+                return "digital-7.ttf";
+            case 4 :
+                return "digital-7-italic.ttf";
+            case 5 :
+                return "digital-7-mono.ttf";
+            case 6 :
+                return "TickingTimebombBB.ttf";
+            case 7 :
+                return "advanced_pixel_lcd_7.ttf";
+            case 8 :
+                return "digital-readout-heavy-oblique.ttf";
+            case 9 :
+                return "digital_readout_heavy.ttf";
             default:
                 return "";
         }

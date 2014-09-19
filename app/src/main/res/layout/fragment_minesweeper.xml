@@ -75,18 +75,18 @@
 
         <com.etiennelawlor.minesweeper.views.CustomFontTextView
             android:id="@+id/flags_tv"
-            android:layout_width="60dp"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/flag_iv"
-            android:background="@android:color/black"
+            android:background="@drawable/digital_bg"
             android:gravity="center"
-            android:padding="3dp"
+            android:padding="8dp"
             android:text="10"
             android:textColor="@color/red"
-            android:textSize="30sp"
+            android:textSize="32sp"
             android:textStyle="bold"
-            app:textFont="DS_DIGIT" />
+            app:textFont="Digital_Dismay" />
 
     </LinearLayout>
 
@@ -107,17 +107,17 @@
 
         <com.etiennelawlor.minesweeper.views.CustomFontTextView
             android:id="@+id/timer_tv"
-            android:layout_width="150dp"
+            android:layout_width="135dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:background="@android:color/black"
+            android:background="@drawable/digital_bg"
             android:gravity="center"
-            android:padding="3dp"
-            android:text="00:00:000"
+            android:padding="8dp"
+            android:text="00:00:00"
             android:textColor="@color/red"
-            android:textSize="30sp"
+            android:textSize="32sp"
             android:textStyle="bold"
-            app:textFont="DS_DIGIT" />
+            app:textFont="Digital_Dismay" />
     </LinearLayout>
 
 

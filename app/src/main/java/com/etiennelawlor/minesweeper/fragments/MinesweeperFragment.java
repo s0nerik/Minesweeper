@@ -112,9 +112,11 @@ public class MinesweeperFragment extends Fragment {
 
                     if(mFlagModeActive){
                         if(flagImageView.getVisibility() == View.GONE) {
-                            tileImageView.setVisibility(View.GONE);
-                            flagImageView.setVisibility(View.VISIBLE);
-                            mFlagsTextView.setText(String.valueOf(--mFlagsCount));
+                            if(mFlagsCount != 0){
+                                tileImageView.setVisibility(View.GONE);
+                                flagImageView.setVisibility(View.VISIBLE);
+                                mFlagsTextView.setText(String.valueOf(--mFlagsCount));
+                            }
                         }else {
                             tileImageView.setVisibility(View.VISIBLE);
                             flagImageView.setVisibility(View.GONE);
@@ -328,8 +330,6 @@ public class MinesweeperFragment extends Fragment {
     // endregion
 
     // region Lifecycle Methods
-
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -356,6 +356,24 @@ public class MinesweeperFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        if(mGameState == GameState.IN_PLAY){
+            mStartTime = SystemClock.uptimeMillis();
+            mCustomHandler.postDelayed(mUpdateTimerThread, 0);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        mTimeSwapBuff += mTimeInMilliseconds;
+        mCustomHandler.removeCallbacks(mUpdateTimerThread);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
@@ -369,6 +387,7 @@ public class MinesweeperFragment extends Fragment {
         mCustomHandler.removeCallbacks(mUpdateTimerThread);
         mFaceImageButton.setImageResource(R.drawable.ic_happy);
         mClickedTileCount = 0;
+        mTimeSwapBuff = 0;
         mFlagsCount = 10;
         mFlagsTextView.setText(String.valueOf(mFlagsCount));
         mTimerTextView.setText("00:00:00");

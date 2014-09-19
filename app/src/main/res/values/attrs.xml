@@ -4,6 +4,14 @@
         <attr name="textFont" format="enum">
             <enum name="DS_DIGII" value="0" />
             <enum name="DS_DIGIT" value="1" />
+            <enum name="Digital_Dismay" value="2" />
+            <enum name="Digital_7" value="3" />
+            <enum name="Digital_7_Italic" value="4" />
+            <enum name="Digital_7_Mono" value="5" />
+            <enum name="TickingTimebombBB" value="6" />
+            <enum name="advanced_pixel_lcd_7" value="7" />
+            <enum name="digital_readout_heavy_oblique" value="8" />
+            <enum name="digital_readout_heavy" value="9" />
         </attr>
     </declare-styleable>
 </resources>

@@ -107,8 +107,8 @@ public class MinesweeperGridAdapter extends BaseAdapter {
         ((Activity)mContext).getWindowManager().getDefaultDisplay().getSize(size);
         int screenWidth = size.x;
 
-        layoutParams.width = screenWidth/numOfColumns - MinesweeperUtils.dp2px(mContext, 4);
-        layoutParams.height = screenWidth/numOfColumns - MinesweeperUtils.dp2px(mContext, 4);
+        layoutParams.width = (screenWidth - MinesweeperUtils.dp2px(mContext, 32)) /numOfColumns;
+        layoutParams.height = (screenWidth - MinesweeperUtils.dp2px(mContext, 32)) /numOfColumns;
 
         return layoutParams;
     }

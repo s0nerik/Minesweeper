@@ -136,11 +136,12 @@ public class MinesweeperFragment extends Fragment {
 
                                 mFaceImageButton.setImageResource(R.drawable.ic_sad);
 
-                                tileImageView.setImageResource(R.drawable.ic_flash_bang);
+                                tileImageView.setImageResource(R.drawable.ic_mine);
                                 tileImageView.setBackgroundColor(getResources().getColor(R.color.red));
 //                                v.setBackgroundColor(getResources().getColor(R.color.red));
 
-                                uncoverAllMines();
+                                uncoverAllMines(i, j);
+                                uncoverFalseFlags();
 
                                 Style croutonStyle = new Style.Builder()
                                         .setHeight(MinesweeperUtils.dp2px(getActivity(), 50))
@@ -160,21 +161,18 @@ public class MinesweeperFragment extends Fragment {
                             } else {
                                 int adjacentMineCount = getAdjacentMineCount(i, j);
 
-                                tileTextView.setText(String.valueOf(adjacentMineCount));
+                                if(adjacentMineCount>0)
+                                    tileTextView.setText(String.valueOf(adjacentMineCount));
+
                                 int numColor = 0;
                                 switch (adjacentMineCount){
-                                    case 0:
+                                    case 1:
                                         numColor = R.color.blue;
                                         break;
-                                    case 1:
+                                    case 2:
                                         numColor = R.color.dark_green;
                                         break;
-                                    case 2:
-                                        numColor = R.color.yellow;
-                                        break;
                                     case 3:
-                                        numColor = R.color.orange;
-                                        break;
                                     case 4:
                                     case 5:
                                     case 6:
@@ -187,7 +185,8 @@ public class MinesweeperFragment extends Fragment {
 
                                 }
 
-                                tileTextView.setTextColor(getResources().getColor(numColor));
+                                if(numColor != 0)
+                                    tileTextView.setTextColor(getResources().getColor(numColor));
 
                                 tileImageView.setVisibility(View.GONE);
                                 tileTextView.setVisibility(View.VISIBLE);
@@ -621,20 +620,42 @@ public class MinesweeperFragment extends Fragment {
         }
     }
 
-    private void uncoverAllMines(){
+    private void uncoverAllMines(int xPos, int yPos){
         for(int i=0; i<8; i++){
             for(int j=0; j<8; j++){
-                if(mBoard[i][j] == true){
+                if(mBoard[i][j] == true && (i!=xPos || j!=yPos)){
                     int position = (i*8)+j;
 
                     View gridItem = mMinesweeperGridView.getChildAt(position);
                     ImageView tileImageView = (ImageView) gridItem.findViewById(R.id.tile_iv);
                     ImageView flagImageView = (ImageView) gridItem.findViewById(R.id.flag_iv);
 
-                    if(flagImageView.getVisibility() == View.VISIBLE)
-                        flagImageView.setImageResource(R.drawable.ic_error_flag_filled);
-                    else
-                        tileImageView.setImageResource(R.drawable.ic_flash_bang);
+//                    if(flagImageView.getVisibility() == View.VISIBLE)
+//                        flagImageView.setImageResource(R.drawable.ic_error_flag_filled);
+//                    else {
+//                        tileImageView.setImageResource(R.drawable.ic_mine);
+//                        tileImageView.setBackgroundColor(getResources().getColor(R.color.gray14));
+//                    }
+
+                    if(tileImageView.getVisibility() == View.VISIBLE) {
+                        tileImageView.setImageResource(R.drawable.ic_mine);
+                        tileImageView.setBackgroundColor(getResources().getColor(R.color.gray14));
+                    }
+                }
+            }
+        }
+    }
+
+    private void uncoverFalseFlags(){
+        for(int i=0; i<8; i++) {
+            for (int j = 0; j < 8; j++) {
+                int position = (i*8)+j;
+
+                View gridItem = mMinesweeperGridView.getChildAt(position);
+                ImageView flagImageView = (ImageView) gridItem.findViewById(R.id.flag_iv);
+
+                if (flagImageView.getVisibility() == View.VISIBLE && mBoard[i][j] == false) {
+                    flagImageView.setImageResource(R.drawable.ic_false_flag);
                 }
             }
         }

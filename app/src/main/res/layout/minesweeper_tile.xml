@@ -2,11 +2,12 @@
 
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:foreground="?android:attr/selectableItemBackground"
-    android:background="@color/light_gray"
-    android:elevation="8dp">
+    android:background="@color/gray15"
+    android:padding="1dp">
 
     <ImageView
         android:id="@+id/tile_iv"
@@ -17,23 +18,32 @@
 
     <ImageView
         android:id="@+id/flag_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_flag_filled"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_flag"
         android:visibility="gone"
-        android:elevation="8dp"
+        android:background="@color/gray14"
         android:layout_gravity="center"/>
 
-    <TextView
+    <com.etiennelawlor.minesweeper.views.CustomFontTextView
         android:id="@+id/tile_tv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="3"
-        android:textStyle="bold"
-        android:textSize="30sp"
+        android:textSize="20sp"
+        android:paddingTop="4dp"
         android:gravity="center"
         android:visibility="gone"
-        android:elevation="8dp"
-        android:layout_gravity="center"/>
+        android:background="@color/gray14"
+        app:textFont="PressStart2P"/>
+
+    <!--<TextView-->
+        <!--android:id="@+id/tile_tv"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:textSize="20sp"-->
+        <!--android:paddingTop="4dp"-->
+        <!--android:gravity="center"-->
+        <!--android:visibility="gone"-->
+        <!--android:background="@color/gray14"/>-->
 
 </FrameLayout>

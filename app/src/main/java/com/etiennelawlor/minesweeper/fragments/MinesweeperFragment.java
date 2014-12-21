@@ -146,7 +146,7 @@ public class MinesweeperFragment extends Fragment {
                                         .setHeight(MinesweeperUtils.dp2px(getActivity(), 50))
 //                                .setTextColor(getResources().getColor(R.color.white))
                                         .setGravity(Gravity.CENTER)
-                                        .setBackgroundColor(R.color.red)
+                                        .setBackgroundColor(R.color.yellow_800)
                                         .build();
 
                                 Crouton.makeText(getActivity(), "Game Over. Look out for the mines.", croutonStyle)
@@ -271,7 +271,7 @@ public class MinesweeperFragment extends Fragment {
                                     .setHeight(MinesweeperUtils.dp2px(getActivity(), 50))
 //                                .setTextColor(getResources().getColor(R.color.white))
                                     .setGravity(Gravity.CENTER)
-                                    .setBackgroundColor(R.color.dark_green)
+                                    .setBackgroundColor(R.color.blue_500)
                                     .build();
 
                             Crouton.makeText(getActivity(), String.format("New High Score! %s is your new personal best!", result.formattedScore), croutonStyle)
@@ -292,7 +292,7 @@ public class MinesweeperFragment extends Fragment {
                                     .setHeight(MinesweeperUtils.dp2px(getActivity(), 50))
 //                                .setTextColor(getResources().getColor(R.color.white))
                                     .setGravity(Gravity.CENTER)
-                                    .setBackgroundColor(R.color.blue)
+                                    .setBackgroundColor(R.color.green_500)
                                     .build();
 
                             Crouton.makeText(getActivity(), String.format("Congratulations! You beat Minesweeper in %s.", formattedScore), croutonStyle)

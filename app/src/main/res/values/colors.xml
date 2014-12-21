@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="gray1">#d0d0d0</color>
-    <color name="gray2">#707070</color>
+    <color name="light_gray">#d0d0d0</color>
+    <color name="dark_gray">#707070</color>
 
     <color name="red">#ff0000</color>
     <color name="orange">#ff8800</color>
@@ -12,5 +12,33 @@
     <color name="aqua">#00ffff</color>
     <color name="blue">#0000ff</color>
 
+    <!-- http://www.99colors.net/ -->
+    <!-- http://stackoverflow.com/questions/15852122/hex-transparency-in-colors -->
+
+    <!-- Colors for the app -->
+    <color name="primary">@color/red_500</color>
+    <!--<color name="control_highlight">#1f8755</color>-->
+    <color name="primary_dark">@color/red_700</color>
+    <color name="accent">@color/green_500</color>
+
+    <color name="gray1">#f1f2f1</color>
+    <color name="gray2">#F2F2F2</color>
+    <color name="gray3">#ededed</color>
+    <color name="gray4">#ebeceb</color>
+    <color name="gray5">#EAEAEA</color>
+    <color name="gray6">#e4e4e4</color>
+    <color name="gray7">#d5d5d5</color>
+    <color name="gray8">#D2D2D2</color> //
+    <color name="gray9">#cecece</color>
+    <color name="gray10">#C2C2C2</color>
+    <color name="gray11">#C9C9C9</color> //
+    <color name="gray12">#c8c8c8</color> //
+    <color name="gray13">#BEBEBE</color>
+    <color name="gray14">#818181</color>
+    <color name="gray15">#7A7A7A</color> //
+    <color name="gray16">#767676</color> //
+    <color name="gray17">#666666</color> //
+    <color name="gray18">#656565</color> //
+    <color name="gray19">#464646</color> //
 
 </resources>

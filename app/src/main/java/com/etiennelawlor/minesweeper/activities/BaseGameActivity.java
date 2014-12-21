@@ -21,6 +21,7 @@ package com.etiennelawlor.minesweeper.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
 import com.etiennelawlor.minesweeper.utils.GameHelper;
@@ -43,7 +44,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
  *
  * @author Bruno Oliveira (Google)
  */
-public abstract class BaseGameActivity extends FragmentActivity implements
+public abstract class BaseGameActivity extends ActionBarActivity implements
         GameHelper.GameHelperListener {
 
     // The game helper object. This class is mainly a wrapper around this object.

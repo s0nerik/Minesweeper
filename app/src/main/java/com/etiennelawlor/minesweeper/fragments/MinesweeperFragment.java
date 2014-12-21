@@ -137,7 +137,8 @@ public class MinesweeperFragment extends Fragment {
                                 mFaceImageButton.setImageResource(R.drawable.ic_sad);
 
                                 tileImageView.setImageResource(R.drawable.ic_flash_bang);
-                                v.setBackgroundColor(getResources().getColor(R.color.red));
+                                tileImageView.setBackgroundColor(getResources().getColor(R.color.red));
+//                                v.setBackgroundColor(getResources().getColor(R.color.red));
 
                                 uncoverAllMines();
 

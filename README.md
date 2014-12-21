@@ -8,6 +8,11 @@ Race the world in uncovering all tiles that don't contain a mine.
 The goal is to uncover all tiles that are not containing mines. Use 
 the flags to help you mark where you think a mine might be located
 
+<a href="https://play.google.com/store/apps/details?id=com.etiennelawlor.minesweeper">
+  <img alt="Get it on Google Play"
+       src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" />
+</a>
+
 <img src="images/minesweeper_loss.png">
 
 <img src="images/minesweeper_win.png">
@@ -24,12 +29,9 @@ The button centered below the grid changes faces depending on a loss or a win.  
 
 Notes
 =====
-I have put this game on the Google Play Store
-https://play.google.com/store/apps/details?id=com.etiennelawlor.minesweeper
 
-I integrated this app with the Google Play Games service.  In the overflow menu, you will notice that you can check the Leaderboard as well as any Achievements that were unlocked.
-
-If you beat the game, your score will be submitted to Google Play Games, and you can potentially set the highest score.
+I integrated this app with the Google Play Games service.  You can check the Leaderboards as well as any Achievements that were unlocked.
+If you beat the game, your score will be submitted to Google Play Games.
 
 Future Todos
 ============
@@ -37,4 +39,4 @@ In the future, I would like to come up with different difficulty levels, differe
 
 Issues
 ======
-Connecting to Google Play Services works sometimes but not all the time.  Given some more time I would be able to test on multiple devices to try to track down the issue.  For example, on my Nexus 5 it is working, but at the moment on my Mom's Samsung Galaxy S5, connecting to Google Play Services is not working.
+Connecting to Google Play Services has issues on some devices.  I need to do some more exhaustive testing on mulitple devices.

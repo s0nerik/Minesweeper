@@ -109,6 +109,13 @@ public class MinesweeperGridAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        viewHolder.mTileTextView.setText("");
+        viewHolder.mTileTextView.setVisibility(View.GONE);
+        viewHolder.mFlagImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_flag));
+        viewHolder.mFlagImageView.setVisibility(View.GONE);
+        viewHolder.mTileImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.selector_tile));
+        viewHolder.mTileImageView.setVisibility(View.VISIBLE);
+
         convertView.setTag(R.id.position_key, position);
 
         return convertView;
@@ -143,8 +150,9 @@ public class MinesweeperGridAdapter extends BaseAdapter {
     // region Inner Classes
 
     public static class ViewHolder {
-//        @InjectView(R.id.tile_iv) ImageView mTileImageView;
-//        @InjectView(R.id.tile_tv) TextView mTileTextView;
+        @InjectView(R.id.tile_iv) ImageView mTileImageView;
+        @InjectView(R.id.tile_tv) TextView mTileTextView;
+        @InjectView(R.id.flag_iv) ImageView mFlagImageView;
 
         ViewHolder(View view) {
             ButterKnife.inject(this, view);

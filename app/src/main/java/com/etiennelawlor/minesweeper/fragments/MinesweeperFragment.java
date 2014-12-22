@@ -386,23 +386,19 @@ public class MinesweeperFragment extends Fragment {
     // region Helper Methods
     private void setUpNewGame(){
         // Reset Variables
-        mGameState = GameState.NOT_STARTED;
-        mCustomHandler.removeCallbacks(mUpdateTimerThread);
-        mFaceImageButton.setImageResource(R.drawable.ic_happy);
-        mClickedTileCount = 0;
-        mTimeSwapBuff = 0;
-        mFlagsCount = 10;
-        mFlagsTextView.setText(String.valueOf(mFlagsCount));
-        mTimerTextView.setText("00:00:00");
-        mBoard = new boolean [8][8];
-        mClickedTiles = new boolean [8][8];
+        initializeGlobalVariables();
 
-        placeMines();
         setUpBoard();
     }
 
     private void restartGame(){
         // Reset Variables
+        initializeGlobalVariables();
+
+        resetBoard();
+    }
+    
+    private void initializeGlobalVariables(){
         mGameState = GameState.NOT_STARTED;
         mCustomHandler.removeCallbacks(mUpdateTimerThread);
         mFaceImageButton.setImageResource(R.drawable.ic_happy);
@@ -413,12 +409,11 @@ public class MinesweeperFragment extends Fragment {
         mTimerTextView.setText("00:00:00");
         mBoard = new boolean [8][8];
         mClickedTiles = new boolean [8][8];
-
-        placeMines();
-        resetBoard();
     }
 
     private void setUpBoard(){
+        placeMines();
+
         mAdapter = new MinesweeperGridAdapter(getActivity());
         mAdapter.setTileClickListener(mTileClickListener);
         mAdapter.setTileLongClickListener(mTileLongClickListener);
@@ -426,10 +421,9 @@ public class MinesweeperFragment extends Fragment {
     }
 
     private void resetBoard(){
-        mAdapter = new MinesweeperGridAdapter(getActivity());
-        mAdapter.setTileClickListener(mTileClickListener);
-        mAdapter.setTileLongClickListener(mTileLongClickListener);
-        mMinesweeperGridView.setAdapter(mAdapter);
+        placeMines();
+
+        mAdapter.notifyDataSetChanged();
     }
 
     private void placeMines(){

@@ -26,8 +26,12 @@ public class MinesweeperGridAdapter extends BaseAdapter {
     // endregion
 
     // region Member Variables
+    private int mGridItemWidth;
+    private int mGridItemHeight;
     private Context mContext;
     private TileClickListener mTileClickListener;
+    private TileLongClickListener mTileLongClickListener;
+
     // endregion
 
     // region Listeners
@@ -42,14 +46,34 @@ public class MinesweeperGridAdapter extends BaseAdapter {
         }
     };
 
+    private View.OnLongClickListener mTileOnLongClickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            int position = (Integer) v.getTag(R.id.position_key);
+
+            if (mTileLongClickListener != null) {
+                mTileLongClickListener.onTileLongClicked(v, position);
+            }
+            return true;
+        }
+    };
+    
     public void setTileClickListener (TileClickListener tileClickListener) {
         mTileClickListener = tileClickListener;
+    }
+
+    public void setTileLongClickListener (TileLongClickListener tileLongClickListener) {
+        mTileLongClickListener = tileLongClickListener;
     }
     // endregion
 
     // region Interfaces
     public interface TileClickListener {
         public void onTileClicked(View v, int position);
+    }
+
+    public interface TileLongClickListener {
+        public void onTileLongClicked(View v, int position);
     }
     // endregion
 
@@ -59,6 +83,11 @@ public class MinesweeperGridAdapter extends BaseAdapter {
 
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
+        int screenWidth = MinesweeperUtils.getScreenWidth(mContext);
+
+        mGridItemWidth = (screenWidth - MinesweeperUtils.dp2px(mContext, 32))/8;
+        mGridItemHeight = (screenWidth - MinesweeperUtils.dp2px(mContext, 32))/8;
+
     }
     // endregion
 
@@ -71,8 +100,9 @@ public class MinesweeperGridAdapter extends BaseAdapter {
             convertView = mLayoutInflater.inflate(R.layout.minesweeper_tile, parent, false);
             viewHolder = new ViewHolder(convertView);
 
-            convertView.setLayoutParams(getGridItemLayoutParams(convertView, 8));
+            convertView.setLayoutParams(getGridItemLayoutParams(convertView));
             convertView.setOnClickListener(mTileOnClickListener);
+            convertView.setOnLongClickListener(mTileOnLongClickListener);
 
             convertView.setTag(viewHolder);
         } else {
@@ -100,15 +130,11 @@ public class MinesweeperGridAdapter extends BaseAdapter {
     }
 
     // region Helper Methods
-    private ViewGroup.LayoutParams getGridItemLayoutParams(View view, int numOfColumns){
+    private ViewGroup.LayoutParams getGridItemLayoutParams(View view){
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
 
-        Point size = new Point();
-        ((Activity)mContext).getWindowManager().getDefaultDisplay().getSize(size);
-        int screenWidth = size.x;
-
-        layoutParams.width = (screenWidth - MinesweeperUtils.dp2px(mContext, 32)) /numOfColumns;
-        layoutParams.height = (screenWidth - MinesweeperUtils.dp2px(mContext, 32)) /numOfColumns;
+        layoutParams.width = mGridItemWidth;
+        layoutParams.height = mGridItemHeight;
 
         return layoutParams;
     }
@@ -117,8 +143,8 @@ public class MinesweeperGridAdapter extends BaseAdapter {
     // region Inner Classes
 
     public static class ViewHolder {
-        @InjectView(R.id.tile_iv) ImageView mTileImageView;
-        @InjectView(R.id.tile_tv) TextView mTileTextView;
+//        @InjectView(R.id.tile_iv) ImageView mTileImageView;
+//        @InjectView(R.id.tile_tv) TextView mTileTextView;
 
         ViewHolder(View view) {
             ButterKnife.inject(this, view);

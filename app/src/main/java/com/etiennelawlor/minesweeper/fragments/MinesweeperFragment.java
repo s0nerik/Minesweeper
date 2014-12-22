@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +13,10 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.etiennelawlor.minesweeper.R;
-import com.etiennelawlor.minesweeper.activities.BaseGameActivity;
 import com.etiennelawlor.minesweeper.adapters.MinesweeperGridAdapter;
 import com.etiennelawlor.minesweeper.interfaces.MinesweeperInterface;
 import com.etiennelawlor.minesweeper.utils.MinesweeperUtils;
@@ -29,14 +26,10 @@ import com.google.android.gms.games.leaderboard.LeaderboardVariant;
 import com.google.android.gms.games.leaderboard.Leaderboards;
 import com.google.android.gms.games.leaderboard.ScoreSubmissionData;
 
-import org.w3c.dom.Text;
-
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import de.keyboardsurfer.android.widget.crouton.Configuration;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -51,7 +44,6 @@ public class MinesweeperFragment extends Fragment {
     // region Member Variables
     private boolean [][] mBoard;
     private boolean [][] mClickedTiles;
-    private boolean mFlagModeActive = false;
     private MinesweeperGridAdapter mAdapter;
     private GameState mGameState;
     private int mFlagsCount;
@@ -89,6 +81,37 @@ public class MinesweeperFragment extends Fragment {
     // endregion
 
     // region Listeners
+    private MinesweeperGridAdapter.TileLongClickListener mTileLongClickListener = new MinesweeperGridAdapter.TileLongClickListener() {
+        @Override
+        public void onTileLongClicked(View v, int position) {
+
+            if(mGameState != GameState.ENDED) {
+
+                if (mGameState == GameState.NOT_STARTED) {
+                    mStartTime = SystemClock.uptimeMillis();
+                    mCustomHandler.postDelayed(mUpdateTimerThread, 0);
+                    mGameState = GameState.IN_PLAY;
+                }
+
+                ImageView flagImageView = (ImageView) v.findViewById(R.id.flag_iv);
+                ImageView tileImageView = (ImageView) v.findViewById(R.id.tile_iv);
+
+                if(flagImageView.getVisibility() == View.GONE) {
+                    if(mFlagsCount != 0){
+                        tileImageView.setVisibility(View.GONE);
+                        flagImageView.setVisibility(View.VISIBLE);
+                        mFlagsTextView.setText(String.valueOf(--mFlagsCount));
+                    }
+                }else {
+                    tileImageView.setVisibility(View.VISIBLE);
+                    flagImageView.setVisibility(View.GONE);
+
+                    mFlagsTextView.setText(String.valueOf(++mFlagsCount));
+                }
+            }
+        }
+    };
+    
     private MinesweeperGridAdapter.TileClickListener mTileClickListener = new MinesweeperGridAdapter.TileClickListener() {
         @Override
         public void onTileClicked(View v, int position) {
@@ -110,128 +133,113 @@ public class MinesweeperFragment extends Fragment {
 
                 if(!mClickedTiles[i][j]){ // If tile has not been clicked
 
-                    if(mFlagModeActive){
-                        if(flagImageView.getVisibility() == View.GONE) {
-                            if(mFlagsCount != 0){
-                                tileImageView.setVisibility(View.GONE);
-                                flagImageView.setVisibility(View.VISIBLE);
-                                mFlagsTextView.setText(String.valueOf(--mFlagsCount));
+                    if(flagImageView.getVisibility() == View.GONE){
+
+                        mClickedTiles[i][j] = true;
+                        mClickedTileCount++;
+
+                        if(mBoard[i][j] == true){ // GAME OVER
+                            mGameState = GameState.ENDED;
+
+                            mCustomHandler.removeCallbacks(mUpdateTimerThread);
+
+                            mFaceImageButton.setImageResource(R.drawable.ic_sad);
+
+                            tileImageView.setImageResource(R.drawable.ic_mine);
+                            tileImageView.setBackgroundColor(getResources().getColor(R.color.red));
+//                                v.setBackgroundColor(getResources().getColor(R.color.red));
+
+                            uncoverAllMines(i, j);
+                            uncoverFalseFlags();
+
+                            Style croutonStyle = new Style.Builder()
+                                    .setHeight(MinesweeperUtils.dp2px(getActivity(), 50))
+//                                .setTextColor(getResources().getColor(R.color.white))
+                                    .setGravity(Gravity.CENTER)
+                                    .setBackgroundColor(R.color.yellow_800)
+                                    .build();
+
+                            Crouton.makeText(getActivity(), "Game Over. Look out for the mines.", croutonStyle)
+                                    .setConfiguration(new Configuration.Builder()
+                                            .setDuration(1500)
+                                            .setInAnimation(R.anim.crouton_in)
+                                            .setOutAnimation(R.anim.crouton_out)
+                                            .build())
+                                    .show();
+
+                        } else {
+                            int adjacentMineCount = getAdjacentMineCount(i, j);
+
+                            if(adjacentMineCount>0)
+                                tileTextView.setText(String.valueOf(adjacentMineCount));
+
+                            int numColor = 0;
+                            switch (adjacentMineCount){
+                                case 1:
+                                    numColor = R.color.blue;
+                                    break;
+                                case 2:
+                                    numColor = R.color.dark_green;
+                                    break;
+                                case 3:
+                                case 4:
+                                case 5:
+                                case 6:
+                                case 7:
+                                case 8:
+                                    numColor = R.color.red;
+                                    break;
+                                default:
+                                    break;
+
                             }
-                        }else {
-                            tileImageView.setVisibility(View.VISIBLE);
-                            flagImageView.setVisibility(View.GONE);
 
-                            mFlagsTextView.setText(String.valueOf(++mFlagsCount));
-                        }
-                    } else {
-                        if(flagImageView.getVisibility() == View.GONE){
+                            if(numColor != 0)
+                                tileTextView.setTextColor(getResources().getColor(numColor));
 
-                            mClickedTiles[i][j] = true;
-                            mClickedTileCount++;
+                            tileImageView.setVisibility(View.GONE);
+                            tileTextView.setVisibility(View.VISIBLE);
 
-                            if(mBoard[i][j] == true){ // GAME OVER
+                            if(adjacentMineCount == 0){
+                                clickNeighbors(i, j, position);
+                            }
+
+                            if(mClickedTileCount == (8*8)-10){ // YOU WIN!!!
                                 mGameState = GameState.ENDED;
 
                                 mCustomHandler.removeCallbacks(mUpdateTimerThread);
 
-                                mFaceImageButton.setImageResource(R.drawable.ic_sad);
+                                mFaceImageButton.setImageResource(R.drawable.ic_cool);
 
-                                tileImageView.setImageResource(R.drawable.ic_mine);
-                                tileImageView.setBackgroundColor(getResources().getColor(R.color.red));
-//                                v.setBackgroundColor(getResources().getColor(R.color.red));
-
-                                uncoverAllMines(i, j);
-                                uncoverFalseFlags();
-
-                                Style croutonStyle = new Style.Builder()
-                                        .setHeight(MinesweeperUtils.dp2px(getActivity(), 50))
-//                                .setTextColor(getResources().getColor(R.color.white))
-                                        .setGravity(Gravity.CENTER)
-                                        .setBackgroundColor(R.color.yellow_800)
-                                        .build();
-
-                                Crouton.makeText(getActivity(), "Game Over. Look out for the mines.", croutonStyle)
-                                        .setConfiguration(new Configuration.Builder()
-                                                .setDuration(1500)
-                                                .setInAnimation(R.anim.crouton_in)
-                                                .setOutAnimation(R.anim.crouton_out)
-                                                .build())
-                                        .show();
-
-                            } else {
-                                int adjacentMineCount = getAdjacentMineCount(i, j);
-
-                                if(adjacentMineCount>0)
-                                    tileTextView.setText(String.valueOf(adjacentMineCount));
-
-                                int numColor = 0;
-                                switch (adjacentMineCount){
-                                    case 1:
-                                        numColor = R.color.blue;
-                                        break;
-                                    case 2:
-                                        numColor = R.color.dark_green;
-                                        break;
-                                    case 3:
-                                    case 4:
-                                    case 5:
-                                    case 6:
-                                    case 7:
-                                    case 8:
-                                        numColor = R.color.red;
-                                        break;
-                                    default:
-                                        break;
-
+                                if (mCoordinator.isUserSignedIn()) {
+                                    Games.Leaderboards.submitScoreImmediate(mCoordinator.getGoogleApiClient(),
+                                            getResources().getString(R.string.leaderboard_fastest_time),
+                                            mTimeInMilliseconds)
+                                            .setResultCallback(mSubmitScoreResultCallback);
+                                } else {
+                                    Toast.makeText(getActivity(), "Please sign in to submit score", Toast.LENGTH_SHORT).show();
                                 }
 
-                                if(numColor != 0)
-                                    tileTextView.setTextColor(getResources().getColor(numColor));
+                                String achievementId = "";
 
-                                tileImageView.setVisibility(View.GONE);
-                                tileTextView.setVisibility(View.VISIBLE);
-
-                                if(adjacentMineCount == 0){
-                                    clickNeighbors(i, j, position);
+                                double seconds = mTimeInMilliseconds/1000;
+                                if(seconds < 30){
+                                    achievementId = getString(R.string.achievement_cheetah);
+                                } else if(seconds < 60){
+                                    achievementId = getString(R.string.achievement_zebra);
+                                } else if(seconds < 120){
+                                    achievementId = getString(R.string.achievement_rabbit);
+                                } else if(seconds < 300){
+                                    achievementId = getString(R.string.achievement_pig);
+                                } else if(seconds < 600){
+                                    achievementId = getString(R.string.achievement_snail);
                                 }
 
-                                if(mClickedTileCount == (8*8)-10){ // YOU WIN!!!
-                                    mGameState = GameState.ENDED;
-
-                                    mCustomHandler.removeCallbacks(mUpdateTimerThread);
-
-                                    mFaceImageButton.setImageResource(R.drawable.ic_cool);
-
+                                if(!TextUtils.isEmpty(achievementId)){
                                     if (mCoordinator.isUserSignedIn()) {
-                                        Games.Leaderboards.submitScoreImmediate(mCoordinator.getGoogleApiClient(),
-                                                getResources().getString(R.string.leaderboard_fastest_time),
-                                                mTimeInMilliseconds)
-                                                .setResultCallback(mSubmitScoreResultCallback);
+                                        Games.Achievements.unlock(mCoordinator.getGoogleApiClient(), achievementId);
                                     } else {
-                                        Toast.makeText(getActivity(), "Please sign in to submit score", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    String achievementId = "";
-
-                                    double seconds = mTimeInMilliseconds/1000;
-                                    if(seconds < 30){
-                                        achievementId = getString(R.string.achievement_cheetah);
-                                    } else if(seconds < 60){
-                                        achievementId = getString(R.string.achievement_zebra);
-                                    } else if(seconds < 120){
-                                        achievementId = getString(R.string.achievement_rabbit);
-                                    } else if(seconds < 300){
-                                        achievementId = getString(R.string.achievement_pig);
-                                    } else if(seconds < 600){
-                                        achievementId = getString(R.string.achievement_snail);
-                                    }
-
-                                    if(!TextUtils.isEmpty(achievementId)){
-                                        if (mCoordinator.isUserSignedIn()) {
-                                            Games.Achievements.unlock(mCoordinator.getGoogleApiClient(), achievementId);
-                                        } else {
-                                            Toast.makeText(getActivity(), "Please sign in to unlock achievement", Toast.LENGTH_SHORT).show();
-                                        }
+                                        Toast.makeText(getActivity(), "Please sign in to unlock achievement", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
@@ -243,15 +251,10 @@ public class MinesweeperFragment extends Fragment {
     };
 
     @OnClick(R.id.face_ib) void onClicked(){
-        setUpNewGame();
-    }
+//        setUpNewGame();
 
-    @OnCheckedChanged(R.id.flag_tb) void onChecked(boolean isChecked){
-        if(isChecked)
-            mFlagModeActive = true;
-        else
-            mFlagModeActive = false;
-    };
+        restartGame();
+    }
 
     // endregion
 
@@ -394,13 +397,38 @@ public class MinesweeperFragment extends Fragment {
         mBoard = new boolean [8][8];
         mClickedTiles = new boolean [8][8];
 
-        resetBoard();
         placeMines();
+        setUpBoard();
+    }
+
+    private void restartGame(){
+        // Reset Variables
+        mGameState = GameState.NOT_STARTED;
+        mCustomHandler.removeCallbacks(mUpdateTimerThread);
+        mFaceImageButton.setImageResource(R.drawable.ic_happy);
+        mClickedTileCount = 0;
+        mTimeSwapBuff = 0;
+        mFlagsCount = 10;
+        mFlagsTextView.setText(String.valueOf(mFlagsCount));
+        mTimerTextView.setText("00:00:00");
+        mBoard = new boolean [8][8];
+        mClickedTiles = new boolean [8][8];
+
+        placeMines();
+        resetBoard();
+    }
+
+    private void setUpBoard(){
+        mAdapter = new MinesweeperGridAdapter(getActivity());
+        mAdapter.setTileClickListener(mTileClickListener);
+        mAdapter.setTileLongClickListener(mTileLongClickListener);
+        mMinesweeperGridView.setAdapter(mAdapter);
     }
 
     private void resetBoard(){
         mAdapter = new MinesweeperGridAdapter(getActivity());
         mAdapter.setTileClickListener(mTileClickListener);
+        mAdapter.setTileLongClickListener(mTileLongClickListener);
         mMinesweeperGridView.setAdapter(mAdapter);
     }
 

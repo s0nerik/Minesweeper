@@ -11,19 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
 
-        <ToggleButton
-            android:id="@+id/flag_tb"
-            android:layout_width="56dp"
-            android:paddingLeft="0dp"
-            android:paddingRight="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_height="50dp"
-            android:drawableTop="@drawable/selector_bg_flag_toggle"
-            android:paddingTop="4dp"
-            android:drawablePadding="8dp"
-            android:textOn=""
-            android:textOff=""/>
-
         <ImageButton
             android:id="@+id/face_ib"
             android:layout_width="wrap_content"

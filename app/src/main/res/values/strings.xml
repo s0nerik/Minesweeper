@@ -14,5 +14,7 @@
     <string name="gamehelper_license_failed">License check failed.</string>
     <string name="gamehelper_unknown_error">Unknown error.</string>
 
-    <string name="rules">Uncover a mine, and the game ends. Uncover an empty square, and you keep playing. Uncover a number, and it tells you how many mines lay hidden in the eight surrounding squares—information you use to deduce which nearby squares are safe to click. You can use the flags to mark where you think mines are hidden.</string>
+    <string name="rules">Uncover a mine, and the game ends. Uncover an empty square, and you keep playing. Uncover a number, and it tells you how many mines lay hidden in the eight 
+        surrounding squares—information you use to deduce which nearby squares are safe to click. Uncover all safe tiles to win.\n\nYou can use the flags to mark where you think mines are hidden.  To set or unset a
+        flag, long click on a tile.</string>
 </resources>

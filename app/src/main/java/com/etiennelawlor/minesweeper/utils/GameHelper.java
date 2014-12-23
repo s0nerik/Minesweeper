@@ -16,6 +16,9 @@ package com.etiennelawlor.minesweeper.utils;
  * limitations under the License.
  */
 
+
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -41,8 +44,6 @@ import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatch;
 import com.google.android.gms.games.request.GameRequest;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.Plus.PlusOptions;
-
-import java.util.ArrayList;
 
 public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -289,6 +290,9 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
         }
 
         if (0 != (mRequestedClients & CLIENT_APPSTATE)) {
+//            builder.addApi(AppStateManager.API);
+//            builder.addScope(AppStateManager.SCOPE_APP_STATE);
+
             builder.addApi(Drive.API);
             builder.addScope(Drive.SCOPE_APPFOLDER );
         }
@@ -853,6 +857,11 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
             return;
         }
 
+        if (mActivity == null) {
+            debugLog("No need to resolve issue, activity does not exist anymore");
+            return;
+        }
+
         debugLog("resolveConnectionResult: trying to resolve result: "
                 + mConnectionResult);
         if (mConnectionResult.hasResolution()) {
@@ -982,7 +991,8 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
                 .setNeutralButton(android.R.string.ok, null).create();
     }
 
-    static Dialog makeSimpleDialog(Activity activity, String title, String text) {
+    static Dialog
+    makeSimpleDialog(Activity activity, String title, String text) {
         return (new AlertDialog.Builder(activity)).setMessage(text)
                 .setTitle(title).setNeutralButton(android.R.string.ok, null)
                 .create();

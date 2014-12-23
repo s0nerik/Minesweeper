@@ -152,6 +152,8 @@ GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+        
         if (requestCode == REQUEST_RESOLVE_ERROR) {
             mResolvingError = false;
             if (resultCode == RESULT_OK) {
@@ -161,6 +163,12 @@ GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
                     mGoogleApiClient.connect();
                 }
             }
+
+//            // Make sure the app is not already connected or attempting to connect
+//            if (!mGoogleApiClient.isConnecting() &&
+//                    !mGoogleApiClient.isConnected()) {
+//                mGoogleApiClient.connect();
+//            }
         } else {
 //            mHelper.onActivityResult(requestCode, resultCode, data);
         }
